@@ -1,0 +1,8 @@
+node_modules/
+.netlify/
+.env
+.env.*
+*.log
+.DS_Store
+test-results/
+tests/e2e/screenshots/

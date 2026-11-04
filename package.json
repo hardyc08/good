@@ -1,0 +1,25 @@
+{
+  "name": "yindong-formula",
+  "version": "1.0.0",
+  "private": true,
+  "description": "銀動方程式 The Senior Movement Equation — AI 驅動的銀髮個人化運動處方系統",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/unit/*.test.mjs",
+    "test:e2e": "node tests/e2e/run.mjs",
+    "build:vendor": "node scripts/build-vendor.mjs",
+    "build:icons": "node scripts/build-icons.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.4.0",
+    "@netlify/blobs": "^11.1.7"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "qrcode-generator": "^1.4.4"
+  }
+}
