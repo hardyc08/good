@@ -596,7 +596,7 @@
           : '您有疑似心血管相關症狀，請先暫停運動並就醫評估，取得醫師同意後再開始。'
       });
     } else if (cls.needsClearance) {
-      alerts.push({ level: 'clearance', text: cls.acsm.advice + ' 可以把這份處方帶給醫師參考。' });
+      alerts.push({ level: 'clearance', text: cls.acsm.advice + '可以把這份處方帶給醫師參考。' });
     }
     cls.vitals.notes.forEach(function (n) {
       if (!cls.vitals.stopToday) alerts.push({ level: 'caution', text: n });

@@ -224,6 +224,7 @@ test('說明文字：本機版欄位完整、AI 輸出清理與稱呼替換', ()
   assert.equal(YD.narrative.sanitize({ greeting: '' }, ids), null);
   assert.equal(YD.narrative.applyName('{稱呼}您好！', '王奶奶'), '王奶奶您好！');
   assert.equal(YD.narrative.applyName('{稱呼}您好！{稱呼}加油', ''), '您好！您加油');
+  assert.equal(YD.narrative.applyName('{稱呼}您好！', '長者 19'), '長者 19 您好！');
   // 送給 AI 的摘要不含姓名
   assert.ok(!JSON.stringify(ev.summary).includes('測試'));
 });

@@ -38,7 +38,7 @@
       null,
       h(
         'div',
-        { class: 'row between', style: { marginBottom: '12px' } },
+        { class: 'row between no-print', style: { marginBottom: '12px' } },
         h('div', null, h('p', { class: 'step-kicker' }, '🌿 銀動方程式・後台管理系統'), h('h1', { tabindex: '-1', id: 'admin-title', style: { margin: 0 } }, title)),
         h(
           'div',

@@ -220,7 +220,14 @@
     if (!n) {
       return text.split(NAME_TOKEN + '您好').join('您好').split(NAME_TOKEN).join('您');
     }
-    return text.split(NAME_TOKEN).join(n);
+    // 稱呼以英數字結尾（例如「長者 19」）時補一個空白，閱讀較清楚
+    var parts = text.split(NAME_TOKEN);
+    var out = parts[0];
+    for (var i = 1; i < parts.length; i++) {
+      var next = parts[i];
+      out += n + (/[A-Za-z0-9]$/.test(n) && /^[\u4e00-\u9fff]/.test(next) ? ' ' : '') + next;
+    }
+    return out;
   }
 
   YD.narrative = {

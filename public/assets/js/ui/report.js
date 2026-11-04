@@ -41,11 +41,17 @@
     var details = h('details', { class: 'ex-card' });
     var thumb = h('span', { class: 'thumb', 'aria-hidden': 'true' });
     thumb.appendChild(YD.figure.staticSvg(spec, Math.min(1, spec.frames.length - 1)));
+    // 列印時改為「起始 → 結束」兩個姿勢，帶回家照著做
+    var frames = h('span', { class: 'print-frames', 'aria-hidden': 'true' });
+    frames.appendChild(YD.figure.staticSvg(spec, 0));
+    frames.appendChild(h('span', { class: 'arrow' }, '→'));
+    frames.appendChild(YD.figure.staticSvg(spec, Math.min(1, spec.frames.length - 1)));
     details.appendChild(
       h(
         'summary',
         null,
         thumb,
+        frames,
         h('span', null, h('p', { class: 'ex-name' }, ex.name), h('p', { class: 'ex-dose' }, item.dose)),
         h('span', { class: 'chev', 'aria-hidden': 'true' }, '▾')
       )

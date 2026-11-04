@@ -2302,27 +2302,29 @@ table.data a.rowlink {
 /* ------------------------------------------------------------------ */
 /* 列印（長者帶回家）                                                 */
 /* ------------------------------------------------------------------ */
-.print-only {
+.print-only,
+.print-frames {
   display: none;
 }
 @media print {
   :root {
-    font-size: 12.5pt;
+    font-size: 10.5pt;
     --bg: #fff;
     --surface: #fff;
-    --surface-2: #f4f4f1;
+    --surface-2: #f2f2ef;
     --ink: #000;
     --ink-2: #222;
-    --line: #999;
+    --line: #9a9a9a;
     --shadow: none;
   }
   @page {
     size: A4;
-    margin: 14mm 12mm;
+    margin: 12mm 11mm;
   }
   body {
     background: #fff;
     color: #000;
+    line-height: 1.5;
   }
   .site-header,
   .site-footer,
@@ -2341,31 +2343,155 @@ table.data a.rowlink {
   main {
     padding: 0;
   }
+  .wrap {
+    max-width: none;
+    padding: 0;
+  }
+  h2 {
+    font-size: 14pt;
+  }
+  h3 {
+    font-size: 11.5pt;
+    margin-bottom: 4px;
+  }
   .card {
     box-shadow: none;
-    break-inside: avoid;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
   }
   .report-hero {
     background: #fff;
     color: #000;
-    border: 3px solid #000;
+    border: 2px solid #000;
+    padding: 12px 14px;
+    border-radius: 8px;
   }
-  .ex-card {
+  .report-hero h1 {
+    font-size: 17pt;
+  }
+  .alert {
+    padding: 8px 10px;
+    margin-bottom: 8px;
+  }
+  .sft-row,
+  .fitt-card,
+  .day,
+  .phase,
+  .alert,
+  .target-table tr,
+  .rpe-table tr,
+  .ex-card > summary,
+  li {
     break-inside: avoid;
   }
+  h2,
+  h3,
+  .cat-head {
+    break-after: avoid;
+  }
+  .sft-chart {
+    gap: 2px;
+  }
+  .sft-row {
+    padding: 4px 0;
+  }
+  .fitt-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .fitt-card {
+    padding: 8px 10px;
+  }
+  .ex-list {
+    gap: 8px;
+  }
+  .ex-card {
+    border: 1px solid #9a9a9a;
+    border-radius: 8px;
+  }
+  .ex-card > summary {
+    grid-template-columns: auto minmax(0, 1fr);
+    min-height: 0;
+    padding: 6px 8px;
+    gap: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  .ex-card .thumb,
   .ex-card > summary .chev {
     display: none;
   }
-  .ex-card .ex-body {
-    display: grid !important;
+  .print-frames {
+    display: flex !important;
+    align-items: center;
+    gap: 2px;
   }
-  .day,
-  .phase,
-  .fitt-card {
-    break-inside: avoid;
+  .print-frames svg {
+    width: 84px;
+    height: 77px;
+    background: #f2f2ef;
+    border-radius: 6px;
+  }
+  .ex-card .ex-name {
+    font-size: 12pt;
+  }
+  .ex-body {
+    display: block !important;
+    padding: 6px 10px 8px;
+  }
+  .ex-body > div:first-child {
+    display: none;
+  }
+  .ex-body ol,
+  .ex-body ul {
+    margin-bottom: 4px;
+  }
+  .ex-body ol li,
+  .ex-body ul li {
+    margin-bottom: 1px;
+  }
+  .ex-note,
+  .ex-tip {
+    padding: 4px 8px;
+    margin-bottom: 4px;
+  }
+  .week {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .day {
+    padding: 6px 8px;
+    border-radius: 8px;
+  }
+  .phases {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .phase {
+    padding: 8px 10px;
+  }
+  .table-wrap {
+    border: 0;
+  }
+  .target-table thead {
+    position: static;
+    width: auto;
+    height: auto;
+    clip: auto;
+  }
+  .target-table tr {
+    display: table-row;
+  }
+  .target-table td,
+  .target-table th {
+    padding: 4px 6px;
+    border-bottom: 1px solid #ccc;
+  }
+  .target-table td[data-label]::before {
+    content: none;
   }
   .page-break {
-    break-before: page;
+    break-before: auto;
   }
   a {
     color: #000;
