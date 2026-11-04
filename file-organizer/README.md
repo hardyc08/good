@@ -21,13 +21,17 @@
 
 ### 方法一：Windows 免安裝版（.exe）
 
-1. 到這個專案的 **Actions** 分頁 → 點最新一次成功（綠色勾勾）的「File Organizer」→ 在頁面下方 **Artifacts** 下載 `FileOrganizer-Windows`。
+1. 到這個專案的 **Actions** 分頁 → 點最上面（最新）一次「File Organizer」→ 在頁面下方 **Artifacts** 下載 `FileOrganizer-Windows`。
 2. 解壓縮後，雙擊 `FileOrganizer.exe` 即可使用。
+
+（下載檔會保留 90 天；過期的話，在 Actions 分頁打開那次執行，按「Re-run all jobs」就會重新產生。）
 
 > 第一次執行時 Windows 可能顯示「Windows 已保護您的電腦」，這是因為程式沒有購買數位簽章。
 > 點「其他資訊」→「仍要執行」即可。
 
-macOS 也有 `FileOrganizer-macOS` 可以下載（解壓縮後第一次請**按右鍵 →「打開」**）。
+Mac（Apple M 系列晶片）可以下載 `FileOrganizer-macOS`，解壓縮（可能要解兩次）後得到 `FileOrganizer.app`。
+第一次開啟如果被擋下，請按右鍵 →「打開」，或到「系統設定 → 隱私權與安全性」按「**仍要打開**」。
+Intel 晶片的 Mac 請用下面的方法二。
 
 ### 方法二：用 Python 執行（Windows／macOS／Linux）
 
