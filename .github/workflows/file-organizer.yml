@@ -1,0 +1,100 @@
+name: File Organizer
+
+on:
+  push:
+    paths:
+      - "file-organizer/**"
+      - ".github/workflows/file-organizer.yml"
+  pull_request:
+    paths:
+      - "file-organizer/**"
+      - ".github/workflows/file-organizer.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: file-organizer-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-22.04, python: "3.8" }
+          - { os: ubuntu-latest, python: "3.13" }
+          - { os: windows-latest, python: "3.13" }
+          - { os: macos-latest, python: "3.13" }
+    defaults:
+      run:
+        working-directory: file-organizer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Run tests (with a virtual display for the window tests)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a python -m unittest discover -s tests -v
+      - name: Run tests
+        if: runner.os != 'Linux'
+        run: python -m unittest discover -s tests -v
+
+  build:
+    name: Build ${{ matrix.name }} app
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: windows-latest, name: Windows }
+          - { os: macos-latest, name: macOS }
+    defaults:
+      run:
+        working-directory: file-organizer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PyInstaller
+        run: python -m pip install pyinstaller==6.11.1 pillow==11.0.0
+      - name: Build FileOrganizer.exe
+        if: runner.os == 'Windows'
+        run: pyinstaller --noconfirm --onefile --windowed --name FileOrganizer --icon assets/icon.ico --hidden-import file_organizer.gui launcher.py
+      - name: Check that the .exe starts
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "$env:RUNNER_TEMP\sample" | Out-Null
+          Set-Content -Path "$env:RUNNER_TEMP\sample\photo.jpg" -Value "x"
+          $p = Start-Process -FilePath dist\FileOrganizer.exe -ArgumentList "stats", "$env:RUNNER_TEMP\sample" -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "FileOrganizer.exe exited with code $($p.ExitCode)" }
+          $gui = Start-Process -FilePath dist\FileOrganizer.exe -PassThru
+          Start-Sleep -Seconds 10
+          if ($gui.HasExited) { throw "The window closed by itself (exit code $($gui.ExitCode))" }
+          Stop-Process -Id $gui.Id -Force
+      - name: Build FileOrganizer.app
+        if: runner.os == 'macOS'
+        run: |
+          pyinstaller --noconfirm --windowed --name FileOrganizer --icon assets/icon.png --hidden-import file_organizer.gui launcher.py
+          ./dist/FileOrganizer.app/Contents/MacOS/FileOrganizer stats "$RUNNER_TEMP"
+          ./dist/FileOrganizer.app/Contents/MacOS/FileOrganizer &
+          pid=$!
+          sleep 10
+          kill -0 "$pid" || { echo "The window closed by itself"; exit 1; }
+          kill "$pid"
+          cd dist && ditto -c -k --keepParent FileOrganizer.app FileOrganizer-macOS.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FileOrganizer-${{ matrix.name }}
+          path: |
+            file-organizer/dist/FileOrganizer.exe
+            file-organizer/dist/FileOrganizer-macOS.zip
+          if-no-files-found: error

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "file-organizer-helper"
+version = "1.0.0"
+description = "檔案整理小幫手：依類型或日期自動分類檔案、找出重複檔案，所有動作都能復原"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = []
+
+[project.scripts]
+file-organizer = "file_organizer.cli:main"
+
+[project.gui-scripts]
+file-organizer-gui = "file_organizer.gui:main"
+
+[tool.setuptools]
+packages = ["file_organizer"]
