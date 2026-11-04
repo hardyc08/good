@@ -160,6 +160,19 @@ try {
     await phone.locator('#report-title').waitFor();
   });
 
+  await step('回到上一步修改後重新產生：取代原紀錄、沿用長者編號', async () => {
+    const before = await phone.evaluate(() => JSON.parse(localStorage.getItem('yd.records.v1')).length);
+    const code = (await phone.getByText(/已儲存。長者編號/).textContent()).match(/YD-\d+/)[0];
+    await phone.goBack();
+    await phone.waitForURL(/#\/assess\/5/);
+    await phone.getByRole('radio', { name: '1 次' }).click();
+    await phone.getByRole('button', { name: /產生我的運動處方/ }).click();
+    await phone.locator('#report-title').waitFor();
+    const after = await phone.evaluate(() => JSON.parse(localStorage.getItem('yd.records.v1')).length);
+    assert.equal(after, before, '不應產生重複紀錄');
+    assert.ok(await phone.getByText('已儲存。長者編號 ' + code).isVisible(), '應沿用原長者編號');
+  });
+
   await step('列印版面：展開全部動作', async () => {
     await phone.emulateMedia({ media: 'print' });
     await phone.evaluate(() => window.dispatchEvent(new Event('beforeprint')));

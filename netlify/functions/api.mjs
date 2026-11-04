@@ -298,6 +298,7 @@ async function route(req, context) {
       const list = Array.isArray(body.records) ? body.records.slice(0, 500) : [];
       let saved = 0;
       const errors = [];
+      const keyById = new Map((await listKeys()).map((k) => [k.slice(k.lastIndexOf('/') + 1), k]));
       for (const raw of list) {
         try {
           const recId = ID_RE.test(raw.id || '') ? raw.id : YD.assess.newRecordId();
@@ -305,9 +306,11 @@ async function route(req, context) {
           if (!code) code = await allocateElderCode();
           else await store().setJSON('elder/' + code, { createdAt: new Date().toISOString() }, { onlyIfNew: true });
           const rec = buildRecord(raw, { id: recId, elderCode: code, createdAt: validDate(raw.createdAt) || new Date().toISOString(), demo: !!raw.demo });
-          const old = await findKey(recId);
-          if (old && old !== `rec/${code}/${recId}`) await store().delete(old);
-          await store().setJSON(`rec/${code}/${recId}`, rec);
+          const newKey = `rec/${code}/${recId}`;
+          const old = keyById.get(recId);
+          if (old && old !== newKey) await store().delete(old);
+          await store().setJSON(newKey, rec);
+          keyById.set(recId, newKey);
           saved++;
         } catch (e) {
           errors.push(String(e.message || e));

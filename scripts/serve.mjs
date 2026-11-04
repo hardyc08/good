@@ -33,6 +33,22 @@ const TYPES = {
 };
 const NO_EXT_JSON = new Set(['health']);
 
+// 讀取 netlify.toml 中 "/*" 的安全標頭（含 CSP），讓本機測試與正式環境一致
+async function securityHeaders() {
+  try {
+    const toml = await readFile(path.resolve(here, '../netlify.toml'), 'utf8');
+    const block = toml.split('[[headers]]').find((b) => /for = "\/\*"/.test(b)) || '';
+    const out = {};
+    for (const m of block.matchAll(/^\s*([A-Za-z-]+) = "(.*)"\s*$/gm)) {
+      if (m[1] !== 'for') out[m[1]] = m[2];
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+const SECURITY = await securityHeaders();
+
 export async function startServer({ port: p = port, api = withApi, blobsDir } = {}) {
   let apiHandler = null;
   let blobs = null;
@@ -77,6 +93,7 @@ export async function startServer({ port: p = port, api = withApi, blobsDir } = 
       }
       const data = await readFile(file);
       res.writeHead(200, {
+        ...SECURITY,
         'Content-Type': TYPES[path.extname(file)] || (NO_EXT_JSON.has(path.basename(file)) ? 'application/json; charset=utf-8' : 'application/octet-stream'),
         'Cache-Control': 'no-cache'
       });

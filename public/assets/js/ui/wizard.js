@@ -1067,7 +1067,7 @@
       .then(function (nar) {
         gen.mark(3, 'done');
         var record = {
-          elderCode: draft.elderCode || null,
+          elderCode: draft.elderCode || draft.replaceCode || null,
           createdAt: new Date().toISOString(),
           site: ev.input.site,
           demo: false,
@@ -1079,8 +1079,16 @@
           result: YD.assess.snapshot(ev),
           narrative: { source: nar.source, model: nar.model || null, data: nar.data }
         };
-        return YD.store
-          .saveAssessment(record)
+        var replace = draft.replaceId
+          ? YD.store.deleteOwn(draft.replaceId).catch(function () {
+              return null;
+            })
+          : Promise.resolve(null);
+        return replace
+          .then(function () {
+            draft.replaceId = null;
+            return YD.store.saveAssessment(record);
+          })
           .then(function (res) {
             record.id = res.id;
             record.elderCode = res.elderCode;
@@ -1195,7 +1203,11 @@
       return;
     }
     if (n < 6 && draft.saved) {
-      // 已產生處方後回到前面步驟：修改後需重新產生
+      // 已產生處方後回到前面步驟：修改後重新產生，並取代先前儲存的那一筆
+      if (draft.saved.saved && draft.saved.record) {
+        draft.replaceId = draft.saved.record.id;
+        draft.replaceCode = draft.saved.record.elderCode;
+      }
       draft.saved = null;
       persist();
     }
