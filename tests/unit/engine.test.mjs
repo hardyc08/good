@@ -241,7 +241,7 @@ test('示範資料符合簡報統計：19 人、平均 78.4 歲、男 4 女 15�
   for (const r of L) c[r.result.risk]++;
   assert.deepEqual(c, { low: 6, moderate: 8, high: 5 });
   for (const r of L) assert.equal(r.result.version === 'seated', r.result.risk === 'high');
-  const e19 = latest['YD-0019'];
+  const e19 = latest['DM-0019'];
   assert.equal(e19.profile.sex, 'M');
   assert.equal(e19.profile.age, 70);
   assert.equal(e19.result.risk, 'high');

@@ -6,6 +6,7 @@
  *   長者 19 為 70 歲男性、高風險、坐姿適應版。
  * 正式使用時請在後台「清除示範資料」，並以「匯入 CSV」載入真實資料。
  * 另含長者 01 的一筆前測紀錄，用來示範「前後測進步比較」。
+ * 示範資料的長者編號以 DM- 開頭，避免與真實長者（YD-）編號重複。
  */
 (function (root) {
   'use strict';
@@ -101,7 +102,7 @@
     var no = row[0];
     return {
       id: 'demo-' + no + (idSuffix || ''),
-      elderCode: 'YD-00' + no,
+      elderCode: 'DM-00' + no,
       createdAt: row[3] + 'T10:00:00+08:00',
       site: SITE,
       demo: true,
