@@ -135,7 +135,8 @@
   function init() {
     if (state.checked) return Promise.resolve(state);
     var isHttp = /^https?:$/.test(root.location ? root.location.protocol : '');
-    var probe = isHttp
+    var localOnly = !!(root.YD_CONFIG && (root.YD_CONFIG.preview || root.YD_CONFIG.localOnly));
+    var probe = isHttp && !localOnly
       ? fetchTimeout(API + '/health', {}, 3000)
           .then(function (res) {
             if (!res.ok) return null;

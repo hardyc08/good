@@ -496,7 +496,9 @@
           return String(r.createdAt) <= String(rec.createdAt);
         });
         var acts = [
-          h('button', { type: 'button', class: 'btn btn-primary', onclick: function () { root.print(); } }, h('span', { 'aria-hidden': 'true' }, '🖨'), '列印處方'),
+          YD.dom.canPrint()
+            ? h('button', { type: 'button', class: 'btn btn-primary', onclick: function () { root.print(); } }, h('span', { 'aria-hidden': 'true' }, '🖨'), '列印處方')
+            : null,
           h(
             'button',
             {
@@ -900,7 +902,9 @@
         h('p', { class: 'muted' }, '運動項目與劑量一律由規則引擎依 SFT、ACSM、FITT 決定；AI 只負責用長輩聽得懂的話撰寫說明與鼓勵。送出的資料不含姓名。'),
         aiStatus,
         h('div', { class: 'field' }, h('label', { for: 'f-aimode' }, 'AI 使用方式'), modeSel),
-        st.serverAI
+        YD.dom.isPreview()
+          ? h('div', { class: 'alert info' }, h('span', { class: 'icon', 'aria-hidden': 'true' }, 'ℹ️'), h('p', null, '這是預覽版，不會連線到 AI。正式部署到 Netlify 並設定 ANTHROPIC_API_KEY 後，處方說明就會改由 Claude AI 撰寫。'))
+          : st.serverAI
           ? h('p', null, '伺服器已設定 ANTHROPIC_API_KEY，不需要在這裡輸入金鑰。')
           : h(
               'div',
@@ -946,7 +950,9 @@
                 )
               )
             ),
-        h(
+        YD.dom.isPreview()
+          ? null
+          : h(
           'button',
           {
             type: 'button',
@@ -997,14 +1003,14 @@
     );
 
     // QR Code
-    var url = root.location.origin && /^https?:/.test(root.location.protocol) ? root.location.origin + root.location.pathname.replace(/index\.html$/, '') : '';
+    var url = !YD.dom.isPreview() && root.location.origin && /^https?:/.test(root.location.protocol) ? root.location.origin + root.location.pathname.replace(/index\.html$/, '') : '';
     var qrBox = h('div', { class: 'qr-box' });
     el.appendChild(
       h(
         'section',
         { class: 'card' },
         h('h2', null, '📱 推廣 QR Code'),
-        url ? h('p', null, '長者或家屬掃描即可開啟系統：', h('strong', null, url)) : h('p', { class: 'muted' }, '部署到網站後即可產生 QR Code。'),
+        url ? h('p', null, '長者或家屬掃描即可開啟系統：', h('strong', null, url)) : h('p', { class: 'muted' }, '部署到正式網站後，這裡會產生該網址的 QR Code。'),
         url ? qrBox : null,
         url
           ? h(
@@ -1018,10 +1024,14 @@
                   onclick: function () {
                     var img = qrBox.querySelector('img');
                     if (img) {
-                      var a = h('a', { href: img.src, download: '銀動方程式_QRCode.gif' });
-                      root.document.body.appendChild(a);
-                      a.click();
-                      a.remove();
+                      root
+                        .fetch(img.src)
+                        .then(function (r) {
+                          return r.blob();
+                        })
+                        .then(function (b) {
+                          YD.dom.download('銀動方程式_QRCode.gif', b, 'image/gif');
+                        });
                     }
                   }
                 },

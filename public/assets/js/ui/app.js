@@ -109,6 +109,21 @@
         )
       )
     );
+    if (YD.dom.isPreview()) {
+      el.appendChild(
+        h(
+          'div',
+          { class: 'alert info', style: { marginTop: '18px' } },
+          h('span', { class: 'icon', 'aria-hidden': 'true' }, 'ℹ️'),
+          h(
+            'div',
+            null,
+            h('p', null, h('strong', null, '這是試用預覽版。'), '資料只存在您這個瀏覽器，不會傳到任何伺服器；說明文字由本機規則引擎撰寫（正式部署後可改用 Claude AI）。'),
+            h('p', null, '後台在頁面最下方「後台管理」，預設密碼：', h('strong', null, 'yindong2026'), '。內建 19 位長者的示範資料（模擬數據）。')
+          )
+        )
+      );
+    }
 
     el.appendChild(h('h2', { class: 'section-title' }, h('span', { class: 'icon', 'aria-hidden': 'true' }, '🧮'), '三個變數，一份專屬處方'));
     el.appendChild(
@@ -309,7 +324,7 @@
       root.addEventListener('hashchange', route);
       route();
     });
-    if ('serviceWorker' in root.navigator && root.location.protocol === 'https:') {
+    if (!YD.dom.isPreview() && 'serviceWorker' in root.navigator && root.location.protocol === 'https:') {
       root.navigator.serviceWorker.register('sw.js').catch(function () {
         /* 離線功能非必要 */
       });

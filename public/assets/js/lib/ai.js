@@ -22,6 +22,7 @@
   function status() {
     var st = YD.store.state;
     var s = YD.store.settings();
+    if (YD.dom.isPreview()) return { via: null, reason: '預覽版不連線 AI，由本機規則引擎撰寫說明' };
     if (s.aiMode === 'local') return { via: null, reason: '已設定只使用本機規則引擎' };
     if (st.serverAI) return { via: 'server', model: st.serverModel };
     if (YD.store.aiKey()) return { via: 'browser', model: s.aiModel };

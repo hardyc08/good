@@ -1129,7 +1129,9 @@
     var body = h('div');
     wrap.appendChild(body);
     var acts = [
-      h('button', { type: 'button', class: 'btn btn-primary', onclick: function () { root.print(); } }, h('span', { 'aria-hidden': 'true' }, '🖨'), '列印／存成 PDF'),
+      YD.dom.canPrint()
+        ? h('button', { type: 'button', class: 'btn btn-primary', onclick: function () { root.print(); } }, h('span', { 'aria-hidden': 'true' }, '🖨'), '列印／存成 PDF')
+        : null,
       YD.speech.supported
         ? h('button', { type: 'button', class: 'btn btn-secondary', onclick: function () { YD.speech.speak(YD.report.readAloudText(rendered.ev, rendered.narrative, record.profile.name)); } }, h('span', { 'aria-hidden': 'true' }, '🔊'), '朗讀重點')
         : null,

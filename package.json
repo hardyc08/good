@@ -9,7 +9,8 @@
     "test:e2e": "node tests/e2e/run.mjs",
     "build:vendor": "node scripts/build-vendor.mjs",
     "build:icons": "node scripts/build-icons.mjs",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "build:preview": "node scripts/build-preview.mjs"
   },
   "engines": {
     "node": ">=20"

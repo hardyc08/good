@@ -187,7 +187,42 @@
     return s;
   }
 
+  /** 預覽模式：在 claude.ai 私人預覽頁中執行（由頁面設定 window.YD_CONFIG）。 */
+  function isPreview() {
+    return !!(root.YD_CONFIG && root.YD_CONFIG.preview);
+  }
+
+  /**
+   * 下載檔案。一般網站直接下載；預覽頁不能直接下載，改請檢視者確認存檔。
+   * 回傳 Promise（成功 true、取消或無法下載 false），錯誤已用提示訊息告知。
+   */
   function download(filename, content, mime) {
+    if (isPreview()) {
+      var api = root.claude && typeof root.claude.use === 'function' ? root.claude.use('downloads') : Promise.resolve(null);
+      return api
+        .then(function (dl) {
+          if (!dl) {
+            toast('這個預覽環境無法下載檔案；正式部署後即可使用。', 4500);
+            return false;
+          }
+          return dl.save({ filename: filename, data: content }).then(
+            function () {
+              return true;
+            },
+            function (err) {
+              var code = err && err.code;
+              if (code === 'declined') toast('已取消下載');
+              else if (code === 'rate_limited') toast('已有一個存檔確認視窗，請先處理後再試');
+              else toast('這個預覽環境無法下載檔案；正式部署後即可使用。', 4500);
+              return false;
+            }
+          );
+        })
+        .catch(function () {
+          toast('這個預覽環境無法下載檔案；正式部署後即可使用。', 4500);
+          return false;
+        });
+    }
     var blob = content instanceof Blob ? content : new Blob([content], { type: mime || 'text/plain;charset=utf-8' });
     var url = URL.createObjectURL(blob);
     var a = h('a', { href: url, download: filename });
@@ -197,6 +232,12 @@
       URL.revokeObjectURL(url);
       if (a.parentNode) a.parentNode.removeChild(a);
     }, 1000);
+    return Promise.resolve(true);
+  }
+
+  /** 預覽頁的框架不允許開啟列印對話框，此時不顯示列印按鈕。 */
+  function canPrint() {
+    return !isPreview() && typeof root.print === 'function';
   }
 
   /** 遮蔽姓名：王小明 → 王○明（去識別化顯示）。 */
@@ -236,6 +277,8 @@
     alert: alertBox,
     fmtDate: fmtDate,
     download: download,
+    isPreview: isPreview,
+    canPrint: canPrint,
     maskName: maskName,
     riskBadge: riskBadge,
     versionBadge: versionBadge
