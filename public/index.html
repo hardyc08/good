@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>銀動方程式｜銀髮個人化運動處方</title>
+    <meta
+      name="description"
+      content="銀動方程式 The Senior Movement Equation：結合 SFT 銀髮族體適能常模、ACSM 風險分級與 FITT 處方原則，為每位長者產生專屬運動處方。"
+    />
+    <meta name="theme-color" content="#1f4020" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/app.css" />
+    <script src="assets/js/boot.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要內容</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="#/" aria-label="銀動方程式 首頁">
+          <span class="brand-mark" aria-hidden="true">🌿</span>
+          <span>銀動方程式<span class="brand-sub">The Senior Movement Equation</span></span>
+        </a>
+        <div class="header-tools">
+          <button type="button" class="tool-btn" id="btn-font" aria-label="調整字體大小">
+            <span aria-hidden="true">Aa</span><span class="tool-label" id="font-label">字級：標準</span>
+          </button>
+          <button type="button" class="tool-btn" id="btn-speech" aria-pressed="false">
+            <span aria-hidden="true">🔊</span><span class="tool-label">語音</span>
+          </button>
+          <button type="button" class="tool-btn" id="btn-theme" aria-label="切換顯示模式">
+            <span aria-hidden="true" id="theme-icon">🌓</span><span class="tool-label" id="theme-label">自動</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <div class="wrap" id="app">
+        <noscript>
+          <div class="card">
+            <h1>需要開啟 JavaScript</h1>
+            <p>銀動方程式需要瀏覽器的 JavaScript 功能才能運作，請開啟後重新整理。</p>
+          </div>
+        </noscript>
+        <div class="empty" id="boot">載入中…</div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div><strong>銀動方程式</strong> · 中國醫藥大學 運動醫學系 · 2026 北港盃 中醫大創新創意競賽 銀髮樂活教育組</div>
+        <div>專業基礎：SFT 銀髮族功能性體適能常模（Rikli &amp; Jones）· ACSM 運動前篩檢 · FITT 處方原則</div>
+        <div>本系統提供運動建議，不取代醫師診斷；如有不適請立即停止運動並就醫。</div>
+        <div><a href="#/about">關於與無障礙聲明</a> · <a href="#/admin">後台管理</a></div>
+      </div>
+    </footer>
+
+    <!-- 核心引擎 -->
+    <script src="assets/js/core/norms.js"></script>
+    <script src="assets/js/core/screening.js"></script>
+    <script src="assets/js/core/exercises.js"></script>
+    <script src="assets/js/core/prescription.js"></script>
+    <script src="assets/js/core/validate.js"></script>
+    <script src="assets/js/core/narrative.js"></script>
+    <script src="assets/js/core/assess.js"></script>
+    <script src="assets/js/data/demo.js"></script>
+    <!-- 工具 -->
+    <script src="assets/js/lib/dom.js"></script>
+    <script src="assets/js/lib/figure.js"></script>
+    <script src="assets/js/lib/speech.js"></script>
+    <script src="assets/js/lib/store.js"></script>
+    <script src="assets/js/lib/ai.js"></script>
+    <script src="assets/js/lib/csv.js"></script>
+    <!-- 介面 -->
+    <script src="assets/js/ui/charts.js"></script>
+    <script src="assets/js/ui/report.js"></script>
+    <script src="assets/js/ui/timer.js"></script>
+    <script src="assets/js/ui/wizard.js"></script>
+    <script src="assets/js/ui/admin.js"></script>
+    <script src="assets/js/ui/app.js"></script>
+  </body>
+</html>

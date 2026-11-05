@@ -1,0 +1,39 @@
+# 銀動方程式 — Netlify 設定
+# 靜態網站在 public/；/api/* 由 netlify/functions/api.mjs 處理（Netlify Blobs 儲存 + Claude AI）。
+# 需要的環境變數（Site configuration → Environment variables）：
+#   ADMIN_PASSWORD     後台密碼（設定後才會啟用雲端資料庫）
+#   ANTHROPIC_API_KEY  Claude API 金鑰（選填，設定後啟用 AI 個人化說明）
+#   ANTHROPIC_MODEL    選填，預設 claude-opus-5-5
+
+[build]
+  publish = "public"
+  command = "echo '銀動方程式：無需建置'"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://api.anthropic.com https://fonts.googleapis.com https://fonts.gstatic.com; worker-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store"
+
+# 沒有部署函式時的備援狀態檔（函式存在時以函式為準）
+[[headers]]
+  for = "/api/health"
+  [headers.values]
+    Content-Type = "application/json; charset=utf-8"
